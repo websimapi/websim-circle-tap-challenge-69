@@ -307,6 +307,7 @@ export class UIController {
             if (wrapper) {
                 if (percentage === 1) {
                     wrapper.classList.add('heart-pulsing');
+                    wrapper.style.filter = ''; // Ensure we clear grayscale if coming from 0
                 } else if (percentage === 0) {
                     wrapper.classList.remove('heart-pulsing');
                     wrapper.style.filter = 'grayscale(1) brightness(0.5)';

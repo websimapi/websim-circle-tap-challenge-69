@@ -154,6 +154,10 @@ export class VSManager {
         this.opponentId = opponentId;
         this.matchId = matchId;
         this.state = 'counting_down';
+        
+        // Clear any previous interpolation state
+        this.currentOpponentState = null;
+        this.targetOpponentState = null;
 
         this.ui.setupVSMatch(this.opponent);
         
@@ -205,7 +209,11 @@ export class VSManager {
 
         const oppData = presence[this.opponentId];
         // Handle undefined health (initial state) by defaulting to 300, but allow 0 (death)
-        const oppHealth = oppData.vs_health !== undefined ? oppData.vs_health : 300;
+        // If we are counting down, force 300 to avoid reading stale end-game state from previous match
+        let oppHealth = oppData.vs_health !== undefined ? oppData.vs_health : 300;
+        if (this.state === 'counting_down') {
+            oppHealth = 300;
+        }
         
         // Update opponent UI
         this.ui.updateOpponentHearts(oppHealth);
